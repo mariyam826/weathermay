@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            color: rgb(223, 220, 220);
+            background-image: url(https://images.pexels.com/photos/161148/rio-de-janeiro-olympics-2016-niteroi-brazil-161148.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
+        }
+
+        input {
+            margin-top: 8vw;
+
+        }
+
+        button {
+            margin-bottom: 10vw;
+        }
+
+        .size {
+            font-size: 4vw;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="vh-100" id="weather-container">
+        <div>
+            <h1>Weather</h1>
+        </div>
+
+        <div id="result" class="d-flex justify-content-center align-items-center flex-column"
+            style="position: relative;margin-left: -40vw;margin-top: 30vw;" id="weather-info">
+
+
+        </div>
+
+
+        <div class="vh-100 "  style="position: absolute;bottom: 0;right: 7vw; padding: 5vw; background-color: rgb(128, 128, 128,0.3);" id="sidebar">
+            <div>
+                <input style="padding: 0.5vw 2vw;" type="text" id="cityInput" placeholder="Enter city name">
+                <hr >
+                <button style="padding: 0.5vw 2vw;" onclick="searchWeather()"><i
+                        class="fa-solid fa-magnifying-glass"></i></button>
+
+            </div>
+            <div id="result2">
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        const searchWeather = async () => {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=kakkanad&appid=8ac5c4d57ba6a4b3dfcf622700447b1e&units=metric`);
+            const weather = await response.json();
+            const cityName = weather.name;
+            const temperature = `${weather.main.temp}°C`;
+            const feelsLike = `Feels Like: ${weather.main.feels_like}°C`;
+            const country = `Country: ${weather.sys.country}`;
+            const humidity = `Humidity: ${weather.main.humidity}%`;
+            const wind = `Wind: ${weather.wind.speed} kmph`;
+            const pressure = `Pressure: ${weather.main.pressure}`;
+            const currentDate = formatCurrentDate();
+            const city = document.getElementById('cityInput').value
+            if (!city) {
+                alert('Please enter a city name.');
+                return;
+            }
+            else if (city != 'kakkanad') {
+                alert('Please enter kakkanad.');
+
+            } else {
+                result.innerHTML = `
+            <p class="size" >${temperature}</p>
+            <p >${feelsLike}</p>
+            <p  class="size">${cityName}</p>
+            <p>${currentDate}</p>
+            `
+                result2.innerHTML = `
+            <h2>Weather Details</h2>
+            <p>${country}</p>
+            <p>${humidity}</p>
+            <p>${wind}</p>
+            <p>${pressure}</p>
+            `
+            }
+        }
+
+        function formatCurrentDate() {
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                timeZoneName: 'short',
+            };
+            const currentDateTime = new Date().toLocaleDateString('en-US', options);
+            return currentDateTime;
+        }
+    </script>
+
+</body>
+
+</html>
